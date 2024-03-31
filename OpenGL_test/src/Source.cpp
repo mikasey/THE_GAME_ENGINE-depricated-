@@ -1,7 +1,11 @@
-import std.compat;
+//import std.compat;
+#include <iostream>
+#include <cmath>
 
 #include "glad/glad.h"
 #include "GLFW/glfw3.h"
+
+#include "ShaderClass.h"
 
 void processInput(GLFWwindow*);
 
@@ -14,14 +18,14 @@ int main() {
 
 	GLFWwindow* window = glfwCreateWindow(240*4, 144*4, "TEST!!!", NULL, NULL);
 	if (window == NULL) {
-		std::cout << "Window not go brrrrr\n" << std::endl;
+		std::cerr << "Window not go brrrrr\n" << std::endl;
 		glfwTerminate();
 		return -1;
 	}
 	glfwMakeContextCurrent(window);
 
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
-		std::cout << "Glad has failed you...\n" << std::endl;
+		std::cerr << "Glad has failed you...\n" << std::endl;
 		glfwDestroyWindow(window);
 		glfwTerminate();
 		return -1;
@@ -33,6 +37,7 @@ int main() {
 	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 	glfwSetFramebufferSizeCallback(window, [](GLFWwindow* window, int width, int height) { glViewport(0, 0, width, height); });
 
+	/*
 	const char* vertexShaderSource = "#version 330 core\n\
 		layout (location = 0) in vec3 aPos;\n\
 		void main(){ gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0); }\0";
@@ -59,7 +64,7 @@ int main() {
 	glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
 	if (!success) {
 		glGetShaderInfoLog(fragmentShader, 512, NULL, infoLog);
-		std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" << infoLog << std::endl;
+		std::cerr << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" << infoLog << std::endl;
 	}
 
 	unsigned int shaderProgram;
@@ -70,15 +75,21 @@ int main() {
 	glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
 	if (!success) {
 		glGetProgramInfoLog(shaderProgram, 512, NULL, infoLog);
-		std::cout << "ERROR::SHADER_PROGRAM::LINKING_FAILED\n" << infoLog << std::endl;
+		std::cerr << "ERROR::SHADER_PROGRAM::LINKING_FAILED\n" << infoLog << std::endl;
 	}
 	glDeleteShader(vertexShader);
 	glDeleteShader(fragmentShader);
 	glUseProgram(shaderProgram);
+	*/
 
-	int uniLoc = glGetUniformLocation(shaderProgram, "Color");
-	float alphaValue = 0.0f;
-	glUniform4f(uniLoc, 0.7f, 0.3f, 0.0f, alphaValue);
+	Shader shader("assets//shader.vs", "assets//shader.fs");
+	shader.use();
+	float alphaValue = 1.0f;
+	shader.setFloat4("Color", 0.7f, 0.3f, 0.0f, alphaValue);
+
+	// int uniLoc = glGetUniformLocation(shaderProgram, "Color");
+	// float alphaValue = 0.0f;
+	// glUniform4f(uniLoc, 0.7f, 0.3f, 0.0f, alphaValue);
 
 	float verticesTRIG[] = {
 		-0.5f, -0.0f, 0.0f,		// bottom left
@@ -127,11 +138,17 @@ int main() {
 		processInput(window);
 
 		glClear(GL_COLOR_BUFFER_BIT);
-		glUseProgram(shaderProgram);
+		shader.use();
+		
+		float timeValue = (float)glfwGetTime() * 2;
+		alphaValue = (sin(timeValue) / 2.0f) + 0.5f;
+		shader.setFloat4("Color", 0.7f, 0.3f, 0.0f, alphaValue);
 
-		float timeValue = (float)glfwGetTime()*4;
-		float alphaValue = (sin(timeValue) / 2.0f) + 0.5f;
-		glUniform4f(uniLoc, 0.7f, 0.3f, 0.0f, alphaValue);
+		//glUseProgram(shaderProgram);
+		// 
+		// float timeValue = (float)glfwGetTime()*2;
+		// float alphaValue = (sin(timeValue) / 2.0f) + 0.5f;
+		// glUniform4f(uniLoc, 0.7f, 0.3f, 0.0f, alphaValue);
 
 		glBindVertexArray(VAOtrig);
 		glDrawArrays(GL_TRIANGLES, 0, 3);
