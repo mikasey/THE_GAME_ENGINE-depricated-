@@ -18,6 +18,7 @@
     <None Include="packages.config" />
     <None Include="assets\shader.vs" />
     <None Include="assets\shader.fs" />
+    <None Include="assets\test.gls" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Source.cpp">

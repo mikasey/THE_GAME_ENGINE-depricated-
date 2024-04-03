@@ -169,6 +169,7 @@
   <ItemGroup>
     <None Include="assets\shader.fs" />
     <None Include="assets\shader.vs" />
+    <None Include="assets\test.gls" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
