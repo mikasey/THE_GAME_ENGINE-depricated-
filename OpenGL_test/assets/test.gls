@@ -2,9 +2,13 @@
 #version 330 core
 
 layout (location = 0) in vec3 aPos;
+layout (location = 1) in vec2 aUV;
+
+out vec2 UVcord;
 
 void main(){
 	gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);
+	UVcord = aUV;
 }
 //# VERTEX END
 
@@ -13,10 +17,15 @@ void main(){
 //# FRAGMENT START
 #version 330 core
 
+in vec2 UVcord;
+
 out vec4 FragColor;
-uniform vec4 Color;
+
+uniform int frame;
+uniform float animeSize;
+uniform sampler2D spriteSheet;
 
 void main(){
-    FragColor = Color;
+    FragColor = texture(spriteSheet, vec2(UVcord.x/12  + float(frame-1)/12 , UVcord.y));
 }
 //# FRAGMENT END
