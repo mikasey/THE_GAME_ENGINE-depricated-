@@ -167,19 +167,19 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <None Include="assets\shader.fs" />
-    <None Include="assets\shader.vs" />
     <None Include="assets\test.gls" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="glad\glad.c" />
+    <ClCompile Include="src\MeshObject.cpp" />
     <ClCompile Include="src\ShaderClass.cpp" />
     <ClCompile Include="src\Source.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="glad\glad.h" />
     <ClInclude Include="glad\khrplatform.h" />
+    <ClInclude Include="src\MeshObject.h" />
     <ClInclude Include="sol\abort.hpp" />
     <ClInclude Include="sol\assert.hpp" />
     <ClInclude Include="sol\as_args.hpp" />

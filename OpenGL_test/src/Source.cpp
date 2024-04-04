@@ -5,6 +5,7 @@
 #include "GLFW/glfw3.h"
 
 #include "ShaderClass.h"
+#include "MeshObject.h"
 
 void processInput(GLFWwindow*);
 
@@ -41,6 +42,7 @@ int main() {
 	float alphaValue = 1.0f;
 	shader.setUniformFloat("Color", 0.7f, 0.3f, 0.0f, alphaValue);
 
+	/* OLD STUFF FOR CREATING MESHES
 	float verticesTRIG[] = {
 		-0.5f, -0.0f, 0.0f,		// bottom left
 		 0.5f, -0.0f, 0.0f,		// bottom right
@@ -83,22 +85,43 @@ int main() {
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indicesSQARE), indicesSQARE, GL_STATIC_DRAW);
 
 	glBindVertexArray(NULL);
+	*/
+
+	float verticesSQARE[] = {
+		 0.5f, 0.8f, 0.0f,		// top right
+		 0.5f, -0.8f, 0.0f,		// bottom right
+		-0.5f, -0.8f, 0.0f,		// bottom left
+		-0.5f, 0.8f, 0.0f		// top left
+	};
+	unsigned int indicesSQARE[] = {	// note that we start from 0!
+		 0, 1, 3,				// first triangle
+		 1, 2, 3				// second triangle
+	};
+
+	MeshObject quad(verticesSQARE, sizeof(verticesSQARE), indicesSQARE, sizeof(indicesSQARE));
+	quad.setAtribute(0, 3);
+	quad.instantiate();
 
 	while (!glfwWindowShouldClose(window)) {
 		processInput(window);
 
 		glClear(GL_COLOR_BUFFER_BIT);
 		shader.use();
-		
+
+
 		float timeValue = (float)glfwGetTime() * 2;
 		alphaValue = (sin(timeValue) / 2.0f) + 0.5f;
 		shader.setUniformFloat("Color", 0.7f, 0.3f, 0.0f, alphaValue);
-
+		quad.draw();
+		
+		/*
 		glBindVertexArray(VAOtrig);
 		glDrawArrays(GL_TRIANGLES, 0, 3);
 
 		glBindVertexArray(VAOsqare);
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+		*/
+
 
 		glfwSwapBuffers(window);
 	}
