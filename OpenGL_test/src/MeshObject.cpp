@@ -26,14 +26,16 @@ int MeshObject::instantiate()
 	glGenBuffers(1, &glEBO);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, glEBO);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, meshIndecesSize, meshIndeces, GL_DYNAMIC_DRAW);
-	
 
-	size_t memSizeNow = 0;
+	GLsizei stride = 0;
+	for (int i = 0; i < 16; i++)
+		stride += atributesSizeCount[i] * sizeof(float);
+	size_t pointer = 0;
 	for (int i = 0; i < 16; i++) {
 		if (atributesSizeCount[i] != 0) {
-			glVertexAttribPointer(i, atributesSizeCount[i], GL_FLOAT, GL_FALSE, 0, (void*)memSizeNow);
+			glVertexAttribPointer(i, atributesSizeCount[i], GL_FLOAT, GL_FALSE, stride, (void*)(pointer));
 			glEnableVertexAttribArray(i);
-			memSizeNow += atributesSizeCount[i] * sizeof(float);
+			pointer += atributesSizeCount[i] * sizeof(float);
 		}
 	}	
 

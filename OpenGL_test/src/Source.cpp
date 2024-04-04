@@ -1,8 +1,12 @@
 #include <iostream>
 #include <cmath>
+#include <thread>
+#include <chrono>
+using namespace std::chrono_literals;
 
 #include "glad/glad.h"
 #include "GLFW/glfw3.h"
+#include "stb/stb_image.h"
 
 #include "ShaderClass.h"
 #include "MeshObject.h"
@@ -10,19 +14,27 @@
 void processInput(GLFWwindow*);
 
 int main() {
+	const char *winName = "NYA CAWAI!!!";
+	unsigned int winWidth = 600;
+	unsigned int winHeight = 600;
+
+
 	if (!glfwInit())
 		return -1;
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-	GLFWwindow* window = glfwCreateWindow(240*4, 144*4, "TEST!!!", NULL, NULL);
+	GLFWwindow* window = glfwCreateWindow(winWidth, winHeight, winName, NULL, NULL);
 	if (window == NULL) {
 		std::cerr << "Window not go brrrrr\n" << std::endl;
 		glfwTerminate();
 		return -1;
 	}
 	glfwMakeContextCurrent(window);
+
+
+	glfwSwapInterval(0);
 
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
 		std::cerr << "Glad has failed you...\n" << std::endl;
@@ -31,67 +43,42 @@ int main() {
 		return -1;
 	}
 
-	glViewport(0, 0, 240*4, 144*4);
+	glViewport(0, 0, winWidth, winHeight);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glEnable(GL_BLEND);
-	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+	glClearColor(1.0f, 1.0f, 1.0f, 0.0f);
 	glfwSetFramebufferSizeCallback(window, [](GLFWwindow* window, int width, int height) { glViewport(0, 0, width, height); });
+	
 
 	Shader shader("assets//test.gls");
 	shader.use();
-	float alphaValue = 1.0f;
-	shader.setUniformFloat("Color", 0.7f, 0.3f, 0.0f, alphaValue);
+	shader.setUniformFloat("animeSize", 12.0f);
 
-	/* OLD STUFF FOR CREATING MESHES
-	float verticesTRIG[] = {
-		-0.5f, -0.0f, 0.0f,		// bottom left
-		 0.5f, -0.0f, 0.0f,		// bottom right
-		 0.0f,  0.8f, 0.0f		// top
-	};
-	unsigned int VAOtrig;
-	glGenVertexArrays(1, &VAOtrig);
-	glBindVertexArray(VAOtrig);
-	unsigned int VBOtrig;
-	glGenBuffers(1, &VBOtrig);
-	glBindBuffer(GL_ARRAY_BUFFER, VBOtrig);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(verticesTRIG), verticesTRIG, GL_STATIC_DRAW);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-	glEnableVertexAttribArray(0);
+	unsigned int texture;
+	glGenTextures(1, &texture);
+	glBindTexture(GL_TEXTURE_2D, texture);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, texture);
 
-	glBindVertexArray(NULL);
 
-	float verticesSQARE[] = {
-		 0.5f, 0.0f, 0.0f,		// top right
-		 0.5f, -0.8f, 0.0f,		// bottom right
-		-0.5f, -0.8f, 0.0f,		// bottom left
-		-0.5f, 0.0f, 0.0f		// top left
-	};
-	unsigned int indicesSQARE[] = {	// note that we start from 0!
-		 0, 1, 3,				// first triangle
-		 1, 2, 3				// second triangle
-	};
-	unsigned int VAOsqare;
-	glGenVertexArrays(1, &VAOsqare);
-	glBindVertexArray(VAOsqare);
-	unsigned int VBOsqare;
-	glGenBuffers(1, &VBOsqare);
-	glBindBuffer(GL_ARRAY_BUFFER, VBOsqare);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(verticesSQARE), verticesSQARE, GL_STATIC_DRAW);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-	glEnableVertexAttribArray(0);
-	unsigned int EBOsqare;
-	glGenBuffers(1, &EBOsqare);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBOsqare);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indicesSQARE), indicesSQARE, GL_STATIC_DRAW);
+	int width, height, nrChannels;
+	stbi_set_flip_vertically_on_load(true);
+	unsigned char* imgData = stbi_load("assets/chibi_girl.png", &width, &height, &nrChannels, 0);
 
-	glBindVertexArray(NULL);
-	*/
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, imgData);
+	glGenerateMipmap(GL_TEXTURE_2D);
+	stbi_image_free(imgData);
+	glBindTexture(GL_TEXTURE_2D, texture);
 
 	float verticesSQARE[] = {
-		 0.5f, 0.8f, 0.0f,		// top right
-		 0.5f, -0.8f, 0.0f,		// bottom right
-		-0.5f, -0.8f, 0.0f,		// bottom left
-		-0.5f, 0.8f, 0.0f		// top left
+		 0.8f,	0.8f, 0.0f,	1.0f, 1.0f,	// top right
+		 0.8f, -0.8f, 0.0f,	1.0f, 0.0f,	// bottom right
+		-0.8f, -0.8f, 0.0f,	0.0f, 0.0f,	// bottom left
+		-0.8f,  0.8f, 0.0f,	0.0f, 1.0f,	// top left
 	};
 	unsigned int indicesSQARE[] = {	// note that we start from 0!
 		 0, 1, 3,				// first triangle
@@ -100,6 +87,7 @@ int main() {
 
 	MeshObject quad(verticesSQARE, sizeof(verticesSQARE), indicesSQARE, sizeof(indicesSQARE));
 	quad.setAtribute(0, 3);
+	quad.setAtribute(1, 2);
 	quad.instantiate();
 
 	while (!glfwWindowShouldClose(window)) {
@@ -108,22 +96,14 @@ int main() {
 		glClear(GL_COLOR_BUFFER_BIT);
 		shader.use();
 
-
-		float timeValue = (float)glfwGetTime() * 2;
-		alphaValue = (sin(timeValue) / 2.0f) + 0.5f;
-		shader.setUniformFloat("Color", 0.7f, 0.3f, 0.0f, alphaValue);
+		static int frame = 1;
+		if (frame > 12) frame = 1;
+		shader.setUniformInt("frame", frame);
+		frame++;
 		quad.draw();
-		
-		/*
-		glBindVertexArray(VAOtrig);
-		glDrawArrays(GL_TRIANGLES, 0, 3);
-
-		glBindVertexArray(VAOsqare);
-		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-		*/
-
 
 		glfwSwapBuffers(window);
+		std::this_thread::sleep_for(40ms);
 	}
 
 	glfwDestroyWindow(window);
