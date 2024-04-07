@@ -6,6 +6,7 @@ layout (location = 1) in vec2 aUV;
 
 uniform mat4 objTrans;
 uniform mat4 camTrans;
+uniform mat4 camProjection;
 
 out vec2 UVcord;
 

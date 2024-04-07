@@ -13,7 +13,7 @@ using namespace std::chrono_literals;
 #include "glm/gtc/type_ptr.hpp"
 
 #include "ShaderClass.h"
-#include "MeshObject.h"
+#include "MeshObjectClass.h"
 
 const char* winName = "NYA CAWAI!!!";
 unsigned int winWidth = 600;
@@ -52,21 +52,11 @@ int main() {
 	quad.setAtribute(0, 3);
 	quad.setAtribute(1, 2);
 	quad.instantiate();
-	
-	
-	float angle = 0 ;
-	glm::mat4 trans = glm::mat4(1.0f);
-	trans = glm::translate(trans, glm::vec3(0.0, 0.0, 0.0));
-	trans = glm::rotate(trans, glm::radians(angle), glm::vec3(0.0f, 0.0f, 1.0f));
-	trans = glm::scale(trans, glm::vec3(1.0, 1.0, 1.0));
-	shader.setUniformMat4("objTrans", glm::value_ptr(trans));
-	
 
 	while (!glfwWindowShouldClose(window)) {
 		processInput(window);
 
 		glClear(GL_COLOR_BUFFER_BIT);
-
 
 		shader.use();
 
@@ -74,7 +64,7 @@ int main() {
 		if (frame > 12) frame = 1;
 		shader.setUniformInt("frame", frame);
 		frame++;
-		quad.draw();
+		quad.draw(shader);
 
 		glfwSwapBuffers(window);
 		std::this_thread::sleep_for(1000ms/winFPS);
@@ -138,10 +128,10 @@ int loadTexture(const char* name)
 {
 	glGenTextures(1, &texture);
 	glBindTexture(GL_TEXTURE_2D, texture);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, texture);
 

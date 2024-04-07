@@ -1,5 +1,5 @@
 #include <iostream>
-#include "MeshObject.h"
+#include "MeshObjectClass.h"
 
 MeshObject::MeshObject(float* verteces, size_t vertSize, unsigned int* indeces, size_t indSize)
 {
@@ -11,6 +11,12 @@ MeshObject::MeshObject(float* verteces, size_t vertSize, unsigned int* indeces, 
 	for (int i = 15; i >= 0; i--) {
 		atributesSizeCount[i] = 0;
 	}
+
+	position = glm::vec3(0);
+	scale = glm::vec3(1);
+	rotation = glm::vec3(0);
+
+	transform = glm::mat4(1.0f);
 }
 
 int MeshObject::instantiate()
@@ -44,8 +50,16 @@ int MeshObject::instantiate()
 	return 0;
 }
 
-void MeshObject::draw()
+void MeshObject::draw(Shader shader)
 {
+	transform = glm::mat4(1.0f);
+	transform = glm::translate(transform, position);
+	transform = glm::rotate(transform, glm::radians(rotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
+	transform = glm::rotate(transform, glm::radians(rotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
+	transform = glm::rotate(transform, glm::radians(rotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
+	transform = glm::scale(transform, scale);
+	shader.setUniformMat4("objTrans", glm::value_ptr(transform));
+
 	glBindVertexArray(glVAO);
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 }

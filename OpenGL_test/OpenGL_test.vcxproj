@@ -178,7 +178,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="glad\glad.c" />
-    <ClCompile Include="src\MeshObject.cpp" />
+    <ClCompile Include="src\MeshObjectClass.cpp" />
     <ClCompile Include="src\ShaderClass.cpp" />
     <ClCompile Include="src\Source.cpp" />
     <ClCompile Include="stb\stb_image.cpp" />
@@ -186,7 +186,7 @@
   <ItemGroup>
     <ClInclude Include="glad\glad.h" />
     <ClInclude Include="glad\khrplatform.h" />
-    <ClInclude Include="src\MeshObject.h" />
+    <ClInclude Include="src\MeshObjectClass.h" />
     <ClInclude Include="sol\abort.hpp" />
     <ClInclude Include="sol\assert.hpp" />
     <ClInclude Include="sol\as_args.hpp" />

@@ -13,6 +13,10 @@ public:
 	unsigned int ID;
 	bool isValid = false;
 
+	glm::vec3 position;
+	glm::vec3 scale;
+	glm::vec3 rotation;
+
 	Shader(const char* vertPath, const char* fragPath);
 	~Shader();
 	Shader(const char* path);
