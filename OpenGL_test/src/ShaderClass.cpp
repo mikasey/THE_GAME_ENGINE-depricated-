@@ -89,8 +89,8 @@ Shader::Shader(const char* path) {
 	}
 
 	if (!fileSStream.str().contains("//# VERTEX FALSE")) {
-		unsigned int first;
-		unsigned int last;
+		size_t first;
+		size_t last;
 		first = fileSStream.str().find("//# VERTEX START");
 		last = fileSStream.str().find("//# VERTEX END");
 		vertexString = fileSStream.str().substr(first, last - first).c_str();
@@ -99,8 +99,8 @@ Shader::Shader(const char* path) {
 		vertexString = BASE_VERTEX_SHADER_STR_LIT;
 	}
 	if (!fileSStream.str().contains("//# GEOMETRY FALSE")) {
-		unsigned int first;
-		unsigned int last;
+		size_t first;
+		size_t last;
 		first = fileSStream.str().find("//# GEOMETRY START");
 		last = fileSStream.str().find("//# GEOMETRY END");
 		geometryString = fileSStream.str().substr(first, last - first).c_str();
@@ -111,8 +111,8 @@ Shader::Shader(const char* path) {
 		geometryDefined = false;
 	}
 	if (!fileSStream.str().contains("//# FRAGMENT FALSE")) {
-		unsigned int first;
-		unsigned int last;
+		size_t first;
+		size_t last;
 		first = fileSStream.str().find("//# FRAGMENT START");
 		last = fileSStream.str().find("//# FRAGMENT END");
 		fragmentString = fileSStream.str().substr(first, last - first).c_str();
@@ -192,4 +192,7 @@ void Shader::setUniformFloat(const std::string& name, float value1, float value2
 }
 void Shader::setUniformFloat(const std::string& name, float value1, float value2, float value3, float value4) const {
 	glUniform4f(glGetUniformLocation(ID, name.c_str()), value1, value2, value3, value4);
+}
+void Shader::setUniformMat4(const std::string& name, const float *data) const {
+	glUniformMatrix4fv(glGetUniformLocation(ID, name.c_str()), 1, GL_FALSE, data);
 }

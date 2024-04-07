@@ -16,7 +16,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="assets\chibi_girl.gls" />
     <None Include="assets\test.gls" />
+    <None Include="assets\config.lua" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Source.cpp">
@@ -402,5 +404,16 @@
     <ClInclude Include="stb\stb_image.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\..\..\GAMES_Godot\murder_mystery_game\MC_textures.png">
+      <Filter>Файлы ресурсов</Filter>
+    </Image>
+    <Image Include="assets\chibi_girl.png">
+      <Filter>Файлы ресурсов</Filter>
+    </Image>
+    <Image Include="assets\textures.png">
+      <Filter>Файлы ресурсов</Filter>
+    </Image>
   </ItemGroup>
 </Project>

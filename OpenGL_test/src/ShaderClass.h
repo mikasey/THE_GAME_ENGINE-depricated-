@@ -1,6 +1,7 @@
 #pragma once
 
 #include <glad/glad.h>
+#include "glm/glm.hpp"
 
 #include <string>
 #include <fstream>
@@ -23,6 +24,7 @@ public:
 	void setUniformFloat(const std::string& name, float value1, float value2) const;
 	void setUniformFloat(const std::string& name, float value1, float value2, float value3) const;
 	void setUniformFloat(const std::string& name, float value1, float value2, float value3, float value4) const;
+	void setUniformMat4(const std::string& name, const float* data) const;
 
 
 };

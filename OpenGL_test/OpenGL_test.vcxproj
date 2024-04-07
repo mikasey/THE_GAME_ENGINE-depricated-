@@ -171,6 +171,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <None Include="assets\chibi_girl.gls" />
+    <None Include="assets\config.lua" />
     <None Include="assets\test.gls" />
     <None Include="packages.config" />
   </ItemGroup>
@@ -304,6 +306,11 @@
     <ClInclude Include="sol\wrapper.hpp" />
     <ClInclude Include="src\ShaderClass.h" />
     <ClInclude Include="stb\stb_image.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\..\..\GAMES_Godot\murder_mystery_game\MC_textures.png" />
+    <Image Include="assets\chibi_girl.png" />
+    <Image Include="assets\textures.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
