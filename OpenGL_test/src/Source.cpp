@@ -36,7 +36,7 @@ int main() {
 	shader.use();
 	shader.setUniformFloat("animeSize", (float)texHSize);
 
-	loadTexture("assets/chibi_girl.png");
+	loadTexture("assets/textures.png");
 
 	float verticesSQARE[] = {
 		 1.0f,	1.0f, 0.0f,	1.0f, 1.0f,	// top right
@@ -53,6 +53,45 @@ int main() {
 	quad.setAtribute(1, 2);
 	quad.instantiate();
 
+	float verticesCUBE[]{
+		 1.0f,	1.0f, -1.0f,	1.0f, 1.0f,	// top right front		0
+		 1.0f, -1.0f, -1.0f,	1.0f, 0.0f,	// bottom right front	1
+		-1.0f, -1.0f, -1.0f,	0.0f, 0.0f,	// bottom left front	2
+		-1.0f,  1.0f, -1.0f,	0.0f, 1.0f,	// top left front		3
+																
+		 1.0f, -1.0f,  1.0f,	1.0f, 0.0f,	// bottom right back	5
+		-1.0f, -1.0f,  1.0f,	0.0f, 0.0f,	// bottom left back		6
+		-1.0f,  1.0f,  1.0f,	0.0f, 1.0f,	// top left back		7
+		 1.0f,	1.0f,  1.0f,	1.0f, 1.0f,	// top right back		4
+	};
+	unsigned int indicesCUBE[]{
+		0, 1, 3,							// front
+		1, 2, 3,							//
+		4, 5, 7,							// back
+		5, 6, 7,							//
+											
+		//0, 1, 5,							// left
+		//0, 4, 5,							//
+		//2, 3, 7,							// roght
+		//2, 6, 7,							//
+		//									
+		//1, 2, 6,							// top
+		//1, 5, 6,							//
+		//0, 3, 7,							// down
+		//0, 4, 7								//
+
+	};
+	MeshObject cube(verticesCUBE, sizeof(verticesCUBE), indicesCUBE, sizeof(indicesCUBE));
+	cube.setAtribute(0, 3);
+	cube.setAtribute(1, 2);
+	cube.instantiate();
+	cube.scale = glm::vec3(0.3f);
+	cube.rotation = glm::vec3(-45);
+	glEnable(GL_CULL_FACE);
+	glCullFace(GL_FRONT);
+
+	shader.setUniformFloat("tilesetSize", 32.0f,32.0f);
+
 	while (!glfwWindowShouldClose(window)) {
 		processInput(window);
 
@@ -60,11 +99,12 @@ int main() {
 
 		shader.use();
 
-		static int frame = 1;
-		if (frame > 12) frame = 1;
-		shader.setUniformInt("frame", frame);
-		frame++;
-		quad.draw(shader);
+		//static int frame = 1;
+		//if (frame > 12) frame = 1;
+		//shader.setUniformInt("frame", frame);
+		//frame++;
+
+		cube.draw(shader);
 
 		glfwSwapBuffers(window);
 		std::this_thread::sleep_for(1000ms/winFPS);

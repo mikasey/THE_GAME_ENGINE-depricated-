@@ -27,9 +27,10 @@ out vec4 FragColor;
 
 uniform int frame;
 uniform float animeSize;
+uniform vec2 tilesetSize;
 uniform sampler2D spriteSheet;
 
 void main(){
-    FragColor = texture(spriteSheet, vec2(UVcord.x/12  + float(frame-1)/12 , UVcord.y));
+    FragColor = texture(spriteSheet, vec2(UVcord.x/32.0 + 4.0/32.0, UVcord.y/32.0 + 31.0/32.0));
 }
 //# FRAGMENT END

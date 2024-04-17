@@ -1,7 +1,7 @@
 #include <iostream>
 #include "MeshObjectClass.h"
 
-MeshObject::MeshObject(float* verteces, size_t vertSize, unsigned int* indeces, size_t indSize)
+MeshObject::MeshObject(float* verteces, unsigned int vertSize, unsigned int* indeces, unsigned int indSize)
 {
 	meshVerteces = verteces;
 	meshVertecesSize = vertSize;
@@ -61,7 +61,7 @@ void MeshObject::draw(Shader shader)
 	shader.setUniformMat4("objTrans", glm::value_ptr(transform));
 
 	glBindVertexArray(glVAO);
-	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+	glDrawElements(GL_TRIANGLES, meshIndecesSize, GL_UNSIGNED_INT, 0);
 }
 
 int MeshObject::setAtribute(unsigned char loc, int size)
